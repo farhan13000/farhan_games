@@ -1,0 +1,18 @@
+# Local MongoDB for development. The app also works with MongoDB Atlas
+# (set MONGODB_URI in server/.env) or MONGODB_URI=memory for a zero-install dev DB.
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--quiet', '--eval', 'db.adminCommand("ping")']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mongo-data:
